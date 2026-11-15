@@ -22,7 +22,7 @@
     "@grpc/grpc-js": "^1.14.5"
   },
   "dependencies": {
-    "@luiskr/core": "1.0.0",
+    "@luiskr/core": "*",
     "firebase": "^13.0.0"
   },
   "devDependencies": {
