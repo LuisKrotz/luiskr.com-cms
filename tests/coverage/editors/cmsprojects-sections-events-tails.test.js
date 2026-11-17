@@ -26,6 +26,7 @@ import {
   removeSectionMedia,
   removeSectionText,
 } from '@cms/projects/sections.js'
+import { bindEvents } from '@cms/projects/events.js'
 import { CMS_PROJECTS_CLASSES } from '@cms/tokens.js'
 
 globalThis.alert = jest.fn()
@@ -173,5 +174,28 @@ describe('CmsProjects sections + events tails', () => {
     })
 
     el.remove()
+  })
+
+  test('bindEvents takes the ||0 index fallback on attr-less controls', () => {
+    // Every row-control binder parses data-idx/data-sec/data-tidx at
+    // bind time — elements without them hit the `|| '0'` arm.
+    const bare = document.createElement('button')
+    const h = {
+      currentProject: null,
+      $: () => null,
+      $$: () => [bare],
+      addScopedListener: jest.fn(),
+    }
+
+    expect(() => bindEvents(h)).not.toThrow()
+    expect(h.addScopedListener).toHaveBeenCalled()
+
+    // The paragraph-textarea listener guards `if (cp)` — firing it with a
+    // null currentProject takes the else arm (nothing to write into).
+    const inputListener = h.addScopedListener.mock.calls.find((c) => c[1] === FORM_EVENTS.INPUT)
+
+    if (inputListener) {
+      expect(() => inputListener[2]({ target: { value: 'x' } })).not.toThrow()
+    }
   })
 })

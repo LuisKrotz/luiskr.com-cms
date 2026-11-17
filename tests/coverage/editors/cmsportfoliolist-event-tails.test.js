@@ -121,4 +121,16 @@ describe('CmsPortfolioList event tails', () => {
 
     el.remove()
   })
+
+  test('_bindEvents facade delegates to the binder', async () => {
+    const el = document.createElement(CMS_TAGS.CMS_PORTFOLIO_LIST)
+
+    document.body.appendChild(el)
+    await flush()
+
+    expect(() => el._bindEvents()).not.toThrow()
+    expect(el._renderItem({ title: 't' }, 0)).toBeTruthy()
+
+    el.remove()
+  })
 })

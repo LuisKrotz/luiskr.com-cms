@@ -63,4 +63,26 @@ describe('CmsFooterEditor list tails', () => {
 
     el.remove()
   })
+
+  test('idxOf falls back to 0 when a label input carries no data-idx', async () => {
+    const el = document.createElement(CMS_TAGS.CMS_FOOTER_EDITOR)
+
+    document.body.appendChild(el)
+    await flush()
+
+    el.contactData = { line1: [{ description: 'd1' }], line2: [] }
+    el.legalLinks = []
+    el.relatedFooter = { socials: [] }
+    el._updateDom()
+
+    const stray = document.createElement('input')
+
+    stray.className = `${CMS_LIST_PREFIXES.LINE1}-label`
+    // No DATA_IDX — the attribute read takes the `|| '0'` arm.
+    el.shadowRoot.appendChild(stray)
+
+    el._bindListEvents(CMS_LIST_PREFIXES.LINE1, el.contactData.line1)
+
+    el.remove()
+  })
 })

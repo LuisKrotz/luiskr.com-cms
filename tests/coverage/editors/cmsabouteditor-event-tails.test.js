@@ -186,4 +186,14 @@ describe('CmsAboutEditor event tails', () => {
 
     el.remove()
   })
+
+  test('_renderParagraphList + _renderMentionItems delegates return rendered nodes', async () => {
+    const el = await buildEditor()
+
+    expect(el._renderParagraphList('col1')).toBeTruthy()
+    expect(el._renderParagraphList('col2')).toBeTruthy()
+    expect(el._renderMentionItems()).toBeTruthy()
+
+    el.remove()
+  })
 })
